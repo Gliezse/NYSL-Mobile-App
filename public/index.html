@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="author" content="Cristian Alexis Cruz">
+    <meta name="description" content="NYSL App">
+    <meta name="google-play-app" content="app-id=com.mygood.id">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"> 
+    <title>NYSL Omega App</title>
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="Web App" name="apple-mobile-web-app-title">
+
+    <link rel="icon" href="./img/nysl_logo.png">
+    <link rel="shortcut icon" sizes="128x128" href="./img/nysl_logo.png">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/style.css">
+  </head>
+  <body class="overflow-auto">
+    <main id="app">
+
+
+
+      <div v-show="!menu" id="content">
+
+        <nav v-if="page!=='Game Information' && page!=='Team Information' && page!='Match Forum' && page!='Post Comments'" class="navbar sticky-top">
+          <h3>NYSL - {{page}}</h3>
+          <h3><i class="fas fa-bars text-white" @click="toggleMenu()"></i></h3>
+        </nav>
+
+        <nav class="navbar sticky-top" v-else>
+          <button type="button" class="btn" v-on:click="backArrow()"><h4><i class="fas fa-arrow-left back-arrow text-white"></i></h4></button><h4>{{page}}</h4><span></span>
+          
+        </nav>
+
+
+
+        <div id="homepage" class="overflow-auto text-center" v-if="page==='Home'">
+          <div class="container-fluid text-white">
+            <h1 class="display-1">Hello!</h1>
+            <img src="./img/nysl_logo.png" alt="NYSL logo" width="70%">
+            <h1>Welcome to the <br>
+            <span class="text-nysl2">NYSL League</span><br>
+            Official app</h1>
+            <h4 class="mt-3">Here you will find everything you need to know about league teams and matches!</h4>
+            <a href="#" v-on:click="matchDetails(nextMatch().matchID)">
+              <div class="card mt-4 next-match-card">
+                <div class="card-header bg-nysl2-gradient"><h3>Next Match</h3></div>
+                <div class="card-body text-dark">
+                  
+                  <table class="text-center">
+                    <tr>
+                      <td>
+                        <img v-bind:src="nextMatch().team1.team_logo_img" alt="Team 1 Logo">
+                        <h2 class="card-title">{{nextMatch().team1.team_name}}</h2>
+                      </td>
+
+                      <td><h3>Vs.</h3></td>
+                      <td>
+
+                        <img v-bind:src="nextMatch().team2.team_logo_img" alt="team 2 logo">
+                        <h2>{{nextMatch().team2.team_name}}</h2>
+                        
+                      </td>
+                    </tr>
+                  </table>
+                  
+                  
+                
+                  <h5>{{nextMatch().fullDay}}, {{nextMatch().time}}</h5>
+                  <h5>{{nextMatch().location.name}}</h5>
+                </div>
+              </div>
+            </a>
+            <h6 class="mt-3">(Tap the match above to see details)</h6>
+          </div>
+        </div>
+
+
+        <div id="teams" v-else-if="page==='Teams'" class="overflow-auto">
+          <div class=" text-center">
+            <h6 class="text-white mt-3 mb-3">(Tap on a team to see more information about it!)</h6>
+            <div class="marco mb-3" v-for="team in teams" v-on:click="teamDetails(team.team_name)">
+              <img v-bind:src="team.team_logo_img">
+              
+              <h1>{{team.team_name}}</h1>        
+              
+            </div>
+          </div>       
+        </div>
+
+
+
+
+        <div id="schedule" class="overflow-auto" v-else-if="page==='Schedule'">
+          <div class="container-fluid pl-4 pr-4">
+            <h6 class="text-white mt-2">*All games take place on Saturday</h6>
+            <div class="ls-33 pt-4">
+
+              <div class="mb-3">
+              
+                <div class="dropdown mb-2">
+                  <button class="btn dropdown-toggle" type="button" id="teamDropdownBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Team: {{scheduleFilterT}}</button>
+                  <div class="dropdown-menu" aria-labelledby="teamDropdownBtn">
+                    <a class="dropdown-item" href="#" v-on:click="scheduleFilterT = 'All'">All</a>
+                    <a class="dropdown-item" href="#" v-for="team in teams" v-on:click="scheduleFilterT = team.team_name">{{team.team_name}}</a>
+                  </div>
+                </div>
+              
+              
+                <div class="dropdown">
+                  <button class="btn dropdown-toggle" type="button" id="teamDropdownBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Location: {{scheduleFilterL}}</button>
+                  <div class="dropdown-menu" aria-labelledby="teamDropdownBtn">
+                    <a class="dropdown-item" href="#" v-on:click="scheduleFilterL = 'All'">All</a>
+                    <a class="dropdown-item" href="#" v-for="location in locations" v-on:click="scheduleFilterL = location.name">{{location.name}}</a>
+                  </div>
+                </div>
+                  
+              </div>
+
+
+
+              <div id="septemberMatches" v-if="septemberGames!=null">
+                <h2 class="text-white">September</h2>
+                <div v-for="(dateMatches, index) in septemberGames" class="card" >
+                  <button data-toggle="collapse" data-parent="#septemberMatches" :href="'#septemberCollapse-'+index" class="btn p-0" type="button">
+                    <div class="card-header">
+
+                      <h5>
+                        {{dateMatches[0].day}}/{{parseInt(dateMatches[0].monthN)+1}}
+                      </h5>
+
+                    </div>
+
+                  </button>
+                  <div :id="'septemberCollapse-'+index" class="panel-collapse collapse in">
+                    <div class="card-body">
+                      
+                      <div class="text-center" v-for="match in dateMatches">
+                        <button type="button" class="btn match-portrait" v-on:click="matchDetails(match.matchID)"> <h5>{{match.team1.team_name}} vs {{match.team2.team_name}}</h5> </button>
+                        <button type="button" class="btn match-LS" v-on:click="matchDetailsLS(match.matchID)"  :id="match.matchID" v-bind:class="{ 'bg-nysl2-gradient' : detailedMatch !== null && match.matchID == detailedMatch.matchID }"> <h5>{{match.team1.team_name}} vs {{match.team2.team_name}}</h5> </button>
+                      </div>
+                    
+                    </div>
+                  </div>
+                </div>
+              
+
+
+              </div>
+
+
+
+              <div id="octoberMatches"  v-if="octoberGames!=null">
+                <h2 class="text-white">October</h2>
+                <div v-for="(dateMatches, index) in octoberGames" class="card">
+                  <button data-toggle="collapse" data-parent="#octoberMatches" :href="'#octoberCollapse-'+index" class="btn p-0" type="button">
+                  <div class="card-header">
+
+                    <h5>
+                      {{dateMatches[0].day}}/{{parseInt(dateMatches[0].monthN)+1}}
+                    </h5>
+
+                  </div>
+                  </button>
+                  <div :id="'octoberCollapse-'+index" class="panel-collapse collapse in">
+                    <div class="card-body">
+
+                        <div v-for="match in dateMatches">
+                          <button type="button" class="btn match-portrait" v-on:click="matchDetails(match.matchID)"> <h5>{{match.team1.team_name}} vs {{match.team2.team_name}}</h5> </button>
+                          <button type="button" class="btn match-LS" v-on:click="matchDetailsLS(match.matchID)" :id="match.matchID" v-bind:class="{ 'bg-nysl2-gradient' : detailedMatch !== null && match.matchID == detailedMatch.matchID }"> <h5>{{match.team1.team_name}} vs {{match.team2.team_name}}</h5> </button>
+                        </div>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="text-center mt-4" v-if="octoberGames == null && septemberGames == null">
+                <h2 class="font-weight-light font-italic text-white">There isn't any game that matches the specified filters</h2>
+              </div>
+            </div>
+            <div class="ls-66 ">
+              <div class="info detailed-LS">
+                <h4 v-if="detailedMatch===null">Click on a match and its details will appear here!</h4>
+                <div v-else class="text-center mb-3">
+                  <div class="row teamvs pt-2">
+                    <div class="col-5 team" v-on:click="teamDetails(detailedMatch.team1.team_name)">
+                      <h3>{{detailedMatch.team1.team_name}}</h3>
+                      <img v-bind:src="detailedMatch.team1.team_logo_img" alt="team1_logo" width="80%">
+                      
+                    </div>
+                    <div class="col-2">
+                      <h3 class="mt-4">vs</h3>
+                    </div>
+                    <div class="col-5 team" v-on:click="teamDetails(detailedMatch.team2.team_name)">
+                      <h3>{{detailedMatch.team2.team_name}}</h3>
+                      <img v-bind:src="detailedMatch.team2.team_logo_img" alt="team2_logo" width="80%">
+                    </div>
+                  </div>
+                  <div class="info">
+                    <h5>Date: {{detailedMatch.fullDay}}</h5>
+                    <h5>Time: {{detailedMatch.time}}</h5>                    
+                    <h5>School: {{detailedMatch.location.name}}</h5>
+                    <h6>Address: {{detailedMatch.location.address}}</h6>
+                    <h6 class="mb-3">Map:</h6>
+                    <iframe v-bind:src='detailedMatch.location.map' width='100%' height='200' frameborder='0' allowfullscreen></iframe>
+                  </div>
+                  <div>
+                      <button class="btn text-white bg-nysl2-gradient mt-2" v-on:click="mForum(detailedMatch.matchID)">
+                        <h5><u>Go to match's forum</u></h5>
+                      </button>
+                    </div> 
+                </div>
+
+                
+              </div>
+              
+            </div>
+
+          </div>
+
+        </div>
+
+        <div id="matchDetails" class="overflow-auto" v-else-if="page==='Game Information'">
+          <div class="container-fluid text-center">
+            
+            <div class="row teamvs mb-4 mt-2">
+              <div class="col-5 team" v-on:click="teamDetails(detailedMatch.team1.team_name)">
+                <img v-bind:src="detailedMatch.team1.team_logo_img" alt="team1_logo">
+                <h4>{{detailedMatch.team1.team_name}}</h4>
+              </div>
+              <div class="col-2 mt-4">
+                <h4>vs</h4>
+              </div>
+              <div class="col-5 team" v-on:click="teamDetails(detailedMatch.team2.team_name)">
+                <img v-bind:src="detailedMatch.team2.team_logo_img" alt="team2_logo">
+                <h4>{{detailedMatch.team2.team_name}}</h4>
+              </div>
+            </div>
+            <div class="info">
+              <h5><u>{{detailedMatch.fullDay}}</u></h5>
+              <h5>{{detailedMatch.time}}</h5>
+              <h6>At:</h6>
+              <h5><u>{{detailedMatch.where}}</u></h5>
+              <h5>{{detailedMatch.location.name}}</h5>
+              <h6>Map:</h6>
+              <iframe v-bind:src='detailedMatch.location.map' width='100%' height='200' frameborder='0' allowfullscreen></iframe>
+            </div>
+
+            <div>
+              <button class="btn mt-4" v-on:click="mForum(detailedMatch.matchID)">
+                <h4>Go to match's forum</h4>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        
+
+        <div id="teamDetails" class="overflow-auto" v-else-if="page==='Team Information'">
+          <div class="container-fluid text-center">
+            <div class="text-white pt-4">
+              <div class="info w-75 d-block m-auto">
+                <img v-bind:src="detailedTeam.team_logo_img" alt="" class="detailedTeamImg">
+                <h2 class="mt-3 font-weight-bold">{{detailedTeam.team_name}}</h2>
+              </div>
+              <a href="#" v-on:click="matchDetails(nextTeamMatch(detailedTeam.team_name).matchID)">
+                  <div class="card mt-4 next-match-card">
+                    <div class="card-header bg-nysl2-gradient"><h4>Next {{detailedTeam.team_name}}'s Match</h4></div>
+                    <div class="card-body text-dark">
+                      
+                      <table class="text-center">
+                        <tr>
+                          <td>
+                              <img v-bind:src="nextTeamMatch(detailedTeam.team_name).team1.team_logo_img" alt="Team 1 Logo">
+                            <h2 class="card-title">{{nextTeamMatch(detailedTeam.team_name).team1.team_name}}</h2>
+                            
+                          </td>
+                          <td><h4>Vs.</h4></td>
+                          <td>
+                            <img v-bind:src="nextTeamMatch(detailedTeam.team_name).team2.team_logo_img" alt="team 2 logo">
+                            <h2>{{nextTeamMatch(detailedTeam.team_name).team2.team_name}}</h2>
+                            
+                          </td>
+                        </tr>
+                      </table>
+                      
+                      
+                     
+                      <h5>{{nextTeamMatch(detailedTeam.team_name).fullDay}}, {{nextTeamMatch(detailedTeam.team_name).time}}</h5>
+                      <h5>{{nextTeamMatch(detailedTeam.team_name).location.name}}</h5>
+                    </div>
+                  </div>
+              </a>
+              <span><h2 class="mt-3 mb-2">Scores and Info:</h2></span>
+              <div>
+                <div class="info w-75 d-block m-auto">
+
+                  <ul class="text-center text-white">
+                    
+                      <li><h4>Team Position: {{detailedTeam.team_position}}</h4></li>
+                      
+                      <li><h4>Matches Player: {{detailedTeam.matches_played}}</h4></li>
+                    
+                    
+                      <li><h4>Wins: {{detailedTeam.wins}}</h4></li>
+                      <li><h4>Draws: {{detailedTeam.draws}}</h4></li>
+                      <li><h4>Loses: {{detailedTeam.loses}}</h4></li>
+                    
+                    
+                      <li ><h4>Goal Difference: {{detailedTeam.goal_difference}}</h4></li>
+                    
+                    
+                      <li >  <h4>Points: {{detailedTeam.points}}</h4></li>
+                    
+                  </ul>
+                </div>
+                <div class="mt-4">
+                  <table class="playerList">
+                    <tr class="text-white text-center">
+                      <th><h5>Player Name</h5></th>
+                      <th><h5>Position</h5></th>
+                    </tr>
+                    <tr v-for="player in detailedTeam.players">
+                      <td><h5>{{player.name}}</h5></td>
+                      <td class="text-center"><h5>{{player.position}}</h5></td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+
+
+        <div id="score-table" class="container-fluid" v-else-if="page==='Score Table'">
+          <div class="container-fluid mt-2">
+            <div class="info">
+              <button data-toggle="collapse" data-target="#meanings" class="btn mb-2 text-white"><h6>Tap here to show/hide more info about the score table!</h6></button>
+
+              <div id="meanings" class="collapse text-center">
+                <h5>Pos: Position</h5>
+                <h5>MP: Matches Played</h5>
+                <h5>W: Wins</h5>
+                <h5>D: Draws</h5>
+                <h5>L: Loses</h5>
+                <h5>GD: Goal Difference</h5>
+                <h5>Pts: Points</h5>
+              </div>
+            </div>
+          </div>
+
+
+            <table id="team-positions" class="text-center mt-2">
+              <tr class="">
+                <th><h5>Pos</h5></th>
+                <th><h5>Team</h5></th>
+                <th><h5>MP</h5></th>
+                <th><h5>W</h5></th>
+                <th><h5>D</h5></th>
+                <th><h5>L</h5></th>
+                <th><h5>GD</h5></th>
+                <th><h5>Pts</h5></th>
+              </tr>
+              <tr v-for="team in positionedTeams">
+                <td><h6>{{team.team_position}}</h6></td>
+                <td><h6>{{team.team_name}}</h6></td>
+                <td><h6>{{team.matches_played}}</h6></td>
+                <td><h6>{{team.wins}}</h6></td>
+                <td><h6>{{team.draws}}</h6></td>
+                <td><h6>{{team.loses}}</h6></td>
+                <td><h6>{{team.goal_difference}}</h6></td>
+                <td><h6>{{team.points}}</h6></td>
+              </tr>
+            </table>
+            
+        </div>
+
+
+        <div id="locations" class="overflow-auto text-center" v-else-if="page==='Game Locations'">
+          <div class="container-fluid pt-2">
+            <h4 class="text-white">Filter:</h4>
+            <input type="text" class="form-control mb-3 mt-1 text-center" placeholder="Search" v-model="locationSearch">
+
+            <div v-for="location in filteredLocations" class="mb-4 locationDiv info">
+              <h4><u>{{location.name}}</u></h4>
+              <h5>{{location.address}}</h5>
+              <div>
+                <iframe v-bind:src='location.map' width='100%' height='200' frameborder='0' allowfullscreen></iframe>
+              </div>
+            </div>
+            <div v-if="filteredLocations.length === 0"><h2><u><i>There isn't any location that matches the specified filter</i></u></h2></div>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="matchForum" class="overflow-auto" v-show="page==='Match Forum'">
+        <div class="container-fluid text-center text-white pt-4">
+          <div v-show="!logged">
+            <div class="info w-100 d-block m-auto p-3">
+              <h5 class="mb-3">Sign in to read, create and comment on posts</h5>
+              <button id="sign-in-button" class="btn signButtons"><i class="fab fa-google mr-2"></i> Sign in with Google</button>
+            </div>
+          </div>
+          <div v-show="logged">
+            
+            <button id="sign-out-button" class="btn signButtons w-25"> Sign out</button>
+            
+            
+        
+            <div>
+              <button class="btn mt-4 mb-2" data-toggle="collapse" data-target="#new-post-collapse" id="new-post-collapse-trigger">
+                <h5>Write new post</h5>
+              </button>
+              <div id="new-post-collapse" class="collapse">
+                <div class="info w-75 d-block m-auto p-2">
+                  <input type="text" id="new-post-title" class="form-control w-75 d-block m-auto mb-4" placeholder="Post Title">
+                  <textarea class="form-control w-100 mt-2" placeholder="Post content" rows="3" id="new-post-message"></textarea>
+                  <button class="btn mt-2" id="add-post-button">
+                    <h6>Add new post</h6>
+                  </button>
+                </div>
+              </div>
+              <h3 class="mb-3 mt-3"><u>Latest posts</u></h3>
+              <div v-show="forumPosts.length !== 0">
+                <section id="recent-posts-list">
+                    <div class="posts-container">
+                      <div class="info post mb-3" v-for="post in forumPosts" v-bind:class="'post-'+post.key">
+                        <h6 class="username font-italic">{{post.author}}</h6>
+                        <h2 class="title-text">{{post.title}}</h2>
+                        <p class="text mb-0">{{post.body}}</p>
+                        <button class="btn w-100 mt-2" data-toggle="collapse" :data-target="'#commentsCollapse-'+post.key" ><h6><u> Show/hide comments ({{post.comments.length}})</u></h6></button> 
+                        <div :id="'commentsCollapse-'+post.key" class="collapse mt-2">
+                          
+                          <div v-if="post.comments.length !== 0">
+                            <div v-for="com in post.comments" class="mb-1">
+                              <h6 class="text-left small"><u>{{com.author}}</u></h6>
+                              <p class="text-left mb-0">{{com.text}}</p>
+                            </div>
+                          </div>
+                          <div v-else>
+                            <h6 class="font-italic">There are no comments for this post!</h6>
+                          </div>
+    
+                          <div class="mt-1">
+                            <input class="mb-1 w-100 mt-1" :id="'comm-input-'+post.key" type="text" name="commContent" placeholder="Write a comment">
+                            <button class="btn" v-on:click="funcCom(post.key)">Add Comment</button>
+                          </div>                      
+                        </div>         
+                      </div>
+                    </div>
+                  </section>
+              </div>
+              <div v-show="forumPosts.length === 0">
+                <h6>There are no posts for this match.<br>Be the one that writes the first one!</h6>
+              </div>
+              
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-show="menu">
+        <nav class="navbar sticky-top navbar-dark bg-nysl1">
+            <span></span><h3><i class="fas fa-bars menu-icon text-white" @click="toggleMenu()"></h3></i>
+        </nav>
+        <div id="menu" class="bg-nysl1-gradient text-white" align="center">
+          <div class="menu-items-div">
+            <h1 class="mb-3" v-on:click="changePage">Home</h1>
+            <h1 class="mb-3" v-on:click="changePage">Teams</h1>
+            <h1 class="mb-3" v-on:click="changePage">Schedule</h1>
+            <h1 class="mb-3" v-on:click="changePage">Score Table</h1>
+            <h1 v-on:click="changePage">Game Locations</h1>
+          </div>
+        </div>
+      </div>
+
+    </main>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="./js/info.js"></script>
+
+    <script src="/__/firebase/5.11.1/firebase-app.js"></script>
+    <script src="/__/firebase/5.11.1/firebase-auth.js"></script>
+    <script src="/__/firebase/5.11.1/firebase-database.js"></script>
+    <script src="/__/firebase/init.js"></script>
+
+
+
+    <script src="./js/script.js"></script>
+    <script src="./js/chat.js"></script>
+  </body>
+</html>

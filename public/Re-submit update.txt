@@ -1,0 +1,10 @@
+Dear Tom Denton,
+
+Hello, it's me again!
+I'm sending you the first version of the NYSL Webapp's URL with this document for you to see it and tell me your thoughts of it.
+
+The info provided is the same that I told you it was going to be the last time you've heard of this, but the designs I've sent you are a little different. I've added more color, to make the app look more alive. Also re-organized the data showage to make it better for users to understand and easier to use.
+
+Hope you like how it looks!
+Best wishes,
+Cristian.

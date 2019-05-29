@@ -1,0 +1,357 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+JP');
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+/*General*/
+h1, h2, h3, h4, h5, h6{
+  margin: 0;
+}
+p{
+  font-size: 1.1rem;
+}
+body{
+  background-image: linear-gradient(#275f70, #002631);
+  background-attachment: fixed;
+  background-size: cover;
+  
+  padding-bottom: 10px;
+
+  font-family: 'Poppins', sans-serif;
+}
+.bg-gen{
+  background-image: linear-gradient(#275f70, #002631);
+  background-attachment: fixed;
+}
+a:hover{
+  text-decoration: none;
+  color: white;
+}
+.bg-nysl2-gradient{
+  background-image: linear-gradient(#69B74A,#95ED4A);
+  background-attachment: fixed;
+}
+.info{
+  background-color: #578694;
+  border: solid #578694 2px;
+  border-radius: 10px;
+  color: white;
+}
+.info iframe{
+  border: solid #275f70 4px;
+  border-radius: 5px
+}
+
+
+
+
+
+
+/*Menu*/
+#menu{
+  height: 100vh;
+}
+#menu:a{
+  text-decoration: none;
+  color: white;
+}
+.menu-items-div{
+  padding-top: 20%;
+}
+.bg-nysl1-gradient{
+  background-image: linear-gradient(#033949,black);
+  background-size: cover;
+  background-position: fixed;
+}
+.next-match-card{
+  border-radius: 30px;
+}
+.next-match-card .card-header{
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  color: white;
+}
+.next-match-card img{
+  width: 50%;
+}
+
+
+
+
+
+
+
+/*Nav*/
+nav{
+  position:fixed;
+  background-color: #275f70;
+  height: auto;
+  color: white;
+  font-family: "Noto Sans JP", sans-serif;
+}
+.bg-nysl1{
+  background-color: #033949;
+}
+
+
+
+
+
+
+/*Home*/
+.text-nysl2{
+  color: #a4ff4a;
+}
+
+
+
+
+
+
+/*Teams*/
+.marco{
+  background-color: #578694;
+  padding: 20px;
+  width: 60%;
+  border-radius: 40px;
+  display: block;
+  margin:auto;
+  border: solid #578694 2px;
+  text-align: center;
+  color: white;
+}
+.marco img{
+  width: 100%;
+}
+
+
+
+
+
+
+/*Schedule*/
+#schedule .dropdown button{
+  display: block;
+  margin: auto;
+  width: 80vw;
+  padding: 5px;
+  color: white;
+  background-color: #578694;
+  border: solid #578694 1px;
+  border-radius: 500px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+#schedule .dropdown-menu{
+  width: 80vw;
+  height: auto;
+  overflow: hidden;
+  background-color: #578694;  
+}
+#schedule .dropdown-item{
+  text-align: center;
+  color: white;
+  padding: 3px;
+}
+#schedule .dropdown-item:hover{
+  color: #578694;
+}
+#schedule .card{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border: solid #033949 5px;
+}
+#schedule .card-header{
+  background-color: #033949;
+  color: white;
+  padding: 10px;
+}
+#schedule .card-body{
+  background-color: #578694;
+  padding: 6px;
+  text-align: center;
+}
+#schedule .card-body button{
+  background-color: #275f70;
+  color: white;
+  border: solid #033949 1px;
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+
+
+
+
+
+/*Score Table*/
+#team-positions{
+  font-size: 30px;
+}
+#score-table .info{
+  padding: 5px;
+}
+#team-positions{
+  width: 100%;
+  border-radius: 10px;
+  color: white;
+  background-color: #578694;
+  min-height: 30vh;
+}
+
+
+
+
+
+
+/*Team Details*/
+.playerList{
+  width: 100%;
+}
+.playerList th{
+  background-color: black;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.playerList td{
+  border: solid black 1px;
+  text-align: center;
+  padding: 20px;
+  background-color: #578694;
+}
+#teamDetails ul{
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+
+
+
+
+
+/*Match Details*/
+.team{
+  background-color: #578694;
+  border-radius: 30px;
+  border: solid #033949 2px;
+  font-weight: bold;
+}
+
+.teamvs{
+  width: inherit;
+  color: white;
+  margin: 0;
+}
+
+.teamvs img{
+  width: 70%;
+}
+
+
+#teamDetails .detailedTeamImg{
+  width: 60%;
+}
+
+#matchDetails button{
+  display: block;
+  margin: auto;
+  width: 80vw;
+  padding: 5px;
+  color: white;
+  background-color: #578694;
+  border: solid #578694 1px;
+  border-radius: 500px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/*Match Forum*/
+
+#matchForum .btn{
+  display: block;
+  margin: auto;
+  width: 50vw;
+  padding: 5px;
+  color: white;
+  background-color: #578694;
+  border: solid #578694 1px;
+  border-radius: 500px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.post{
+  min-height: 20px;
+  word-wrap: break-word;
+  padding: 5px;
+}
+#matchForum .signButtons{
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  border: solid 2px white;
+  border-radius: 0;
+}
+
+
+/*Media*/
+@media (orientation: portrait){ 
+  #schedule .card-body .match-LS{
+    display: none;
+  }
+  .ls-66{
+    display: none;
+  }
+}
+
+@media (orientation: landscape){
+  #schedule .dropdown button{
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  #schedule .dropdown-menu{
+    width: 100%;
+    background-color: #578694;   
+  }
+  #schedule a{
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #schedule .card-body button{
+    height: auto;
+    padding: 5px;
+  }
+  .ls-33{
+    height: 80vh;
+    overflow: scroll;
+    width: 33%;
+    float: left;
+    text-align: center;
+  }
+  .ls-66{
+    width: 66%;
+    float: right;
+    height: 80vh;
+    overflow: scroll;
+  }
+  .ls-66 .info{
+    padding: 0;
+  }
+
+  .match-portrait{
+    display: none;
+  }
+
+  .detailed-LS .teamvs{
+    margin: 0;
+  }
+
+  .detailed-LS .team{
+    border: 0;
+    background-color: transparent;
+    font-weight: bold;
+  }
+
+}
